@@ -1,78 +1,74 @@
-import { useEffect, useState } from "react";
-import { ALL_COUNTRIES } from "../config";
-import { useHistory } from "react-router-dom";
-import axios from "axios";
-import List from "../components/List";
-import Card from "../components/Card";
-import Controls from "../components/Controls";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
-const HomePage = ({ setCountries, countries }) => {
-  const [filteredCountries, setFilteredCountries] = useState(countries);
+import { List } from "../components/List";
+import { Card } from "../components/Card";
+import { Controls } from "../components/Controls";
+import {
+  selectCountriesInfo,
+  selectVisibleCountries,
+} from "../store/countries/countries-selectors";
+import { loadCountries } from "../store/countries/countries-actions";
+import { selectControls } from "../store/controls/controls-selectors";
 
-  const { push } = useHistory();
+export const HomePage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleSearch = (search, region) => {
-    let data = [...countries];
-    // console.log(data);
-    if (region) {
-      // console.log(region);
-      data = data.filter((c) => c.region.includes(region));
-    }
-    if (search) {
-      // console.log(search);
-      data = data.filter((c) =>
-        c.name.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-
-    setFilteredCountries(data);
-  };
+  const { search, region } = useSelector(selectControls);
+  const countries = useSelector((state) =>
+    selectVisibleCountries(state, { search, region })
+  );
+  const { status, error, qty } = useSelector(selectCountriesInfo);
 
   // console.log(countries);
+  // console.log(search);
+  // console.log(status);
 
   useEffect(() => {
-    if (!countries.length)
-      axios.get(ALL_COUNTRIES).then(({ data }) => setCountries(data));
-  }, []);
-
-  useEffect(() => {
-    handleSearch();
-  }, [countries]);
+    if (!qty) {
+      dispatch(loadCountries());
+    }
+  }, [qty, dispatch]);
 
   return (
     <>
-      <Controls onSearch={handleSearch} />
-      <List>
-        {filteredCountries.map((c) => {
-          const countryInfo = {
-            img: c.flags.png,
-            name: c.name,
-            info: [
-              {
-                title: "Population",
-                description: c.population.toLocaleString(),
-              },
-              {
-                title: "Region",
-                description: c.region,
-              },
-              {
-                title: "Capital",
-                description: c.capital,
-              },
-            ],
-          };
+      <Controls />
+      {error && <h2> Can't fetch data</h2>}
+      {status === "loading" && <h2>Loading...</h2>}
+      {status === "received" && (
+        <List>
+          {countries.map((c) => {
+            const countryInfo = {
+              img: c.flags.png,
+              name: c.name,
+              info: [
+                {
+                  title: "Population",
+                  description: c.population.toLocaleString(),
+                },
+                {
+                  title: "Region",
+                  description: c.region,
+                },
+                {
+                  title: "Capital",
+                  description: c.capital,
+                },
+              ],
+            };
 
-          return (
-            <Card
-              key={c.name}
-              {...countryInfo}
-              onClick={() => push(`/country/${c.name}`)}
-            />
-          );
-        })}
-      </List>
+            return (
+              <Card
+                key={c.name}
+                onClick={() => navigate(`/country/${c.name}`)}
+                {...countryInfo}
+              />
+            );
+          })}
+        </List>
+      )}
     </>
   );
 };
-export default HomePage;

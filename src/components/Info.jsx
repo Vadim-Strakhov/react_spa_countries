@@ -1,8 +1,8 @@
-import { SiScala } from "react-icons/si";
 import styled from "styled-components";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { filterByCode } from "../config";
+import { useDispatch, useSelector } from "react-redux";
+import { selectNeighbors } from "../store/details/details-selectors";
+import { useEffect } from "react";
+import { loadNeighborsByBorder } from "../store/details/details-actions";
 
 const Wrapper = styled.section`
   margin-top: 3rem;
@@ -22,7 +22,6 @@ const Wrapper = styled.section`
 `;
 
 const InfoImage = styled.img`
-  box-shadow: var(--shadow);
   display: block;
   width: 100%;
   height: 100%;
@@ -31,7 +30,7 @@ const InfoImage = styled.img`
 
 const InfoTitle = styled.h1`
   margin: 0;
-  font-weight: var(--fw-noral);
+  font-weight: var(--fw-normal);
 `;
 
 const ListGroup = styled.div`
@@ -53,7 +52,7 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li`
-  line-height: 1.8rem;
+  line-height: 1.8;
 
   & > b {
     font-weight: var(--fw-bold);
@@ -107,18 +106,19 @@ export const Info = (props) => {
     push,
   } = props;
 
-  const [neighbors, setNeighbors] = useState([]);
+  const dispatch = useDispatch();
+  const neighbors = useSelector(selectNeighbors);
 
   useEffect(() => {
-    if (borders.length)
-      axios
-        .get(filterByCode(borders))
-        .then(({ data }) => setNeighbors(data.map((c) => c.name)));
-  }, [borders]);
+    if (borders.length) {
+      dispatch(loadNeighborsByBorder(borders));
+    }
+  }, [borders, dispatch]);
 
   return (
     <Wrapper>
       <InfoImage src={flag} alt={name} />
+
       <div>
         <InfoTitle>{name}</InfoTitle>
         <ListGroup>
@@ -127,7 +127,7 @@ export const Info = (props) => {
               <b>Native Name:</b> {nativeName}
             </ListItem>
             <ListItem>
-              <b>Population:</b> {population}
+              <b>Population</b> {population}
             </ListItem>
             <ListItem>
               <b>Region:</b> {region}
@@ -138,25 +138,22 @@ export const Info = (props) => {
             <ListItem>
               <b>Capital:</b> {capital}
             </ListItem>
-            <ListItem>
-              <b>Native Name:</b> {nativeName}
-            </ListItem>
           </List>
           <List>
             <ListItem>
-              <b>Top Level Domain</b>
+              <b>Top Level Domain</b>{" "}
               {topLevelDomain.map((d) => (
                 <span key={d}>{d}</span>
               ))}
             </ListItem>
             <ListItem>
-              <b>Currency</b>
+              <b>Currency</b>{" "}
               {currencies.map((c) => (
                 <span key={c.code}>{c.name} </span>
               ))}
             </ListItem>
             <ListItem>
-              <b>Top Level Domain</b>
+              <b>Top Level Domain</b>{" "}
               {languages.map((l) => (
                 <span key={l.name}>{l.name}</span>
               ))}
@@ -169,9 +166,12 @@ export const Info = (props) => {
             <span>There is no border countries</span>
           ) : (
             <TagGroup>
-              {neighbors.map((b) => (
-                <Tag key={b} onClick={() => push(`/country/${b}`)}>
-                  {b}
+              {neighbors.map((countryName) => (
+                <Tag
+                  key={countryName}
+                  onClick={() => push(`/country/${countryName}`)}
+                >
+                  {countryName}
                 </Tag>
               ))}
             </TagGroup>

@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Container } from "./Container";
+import styled from 'styled-components';
+import { Container } from './Container';
 
 const Wrapper = styled.main`
   padding: 2rem 0;
@@ -9,11 +9,10 @@ const Wrapper = styled.main`
   }
 `;
 
-const Main = ({ children }) => {
+export const Main = ({ children }) => {
   return (
     <Wrapper>
       <Container>{children}</Container>
     </Wrapper>
   );
 };
-export default Main;

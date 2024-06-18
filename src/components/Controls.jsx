@@ -1,15 +1,19 @@
-import { CustomSelect } from "./CustomSelect";
-import Search from "./Search";
-import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
 
-const options = [
-  { value: "Africa", label: "Africa" },
-  { value: "America", label: "America" },
-  { value: "Asia", label: "Asia" },
-  { value: "Europe", label: "Europe" },
-  { value: "Oceania", label: "Oceania" },
-];
+import { Search } from "./Search";
+import { CustomSelect } from "./CustomSelect";
+import { selectRegion } from "../store/controls/controls-selectors";
+import { setRegion } from "../store/controls/controls-actions";
+
+const optionsMap = {
+  Africa: { value: "Africa", label: "Africa" },
+  America: { value: "America", label: "America" },
+  Asia: { value: "Asia", label: "Asia" },
+  Europe: { value: "Europe", label: "Europe" },
+  Oceania: { value: "Oceania", label: "Oceania" },
+};
+const options = Object.values(optionsMap);
 
 const Wrapper = styled.div`
   display: flex;
@@ -23,32 +27,25 @@ const Wrapper = styled.div`
   }
 `;
 
-const Controls = ({ onSearch }) => {
-  const [search, setSearch] = useState("");
-  const [region, setRegion] = useState("");
+export const Controls = () => {
+  const dispatch = useDispatch();
+  const region = useSelector(selectRegion);
 
-  // console.log(search);
-  // console.log(region);
-  useEffect(() => {
-    const regionValue = region?.value || "";
-    // console.log(regionValue);
-    onSearch(search, regionValue);
-  }, [search, region]);
+  const handleSelect = (reg) => {
+    dispatch(setRegion(reg?.value || ""));
+  };
 
   return (
     <Wrapper>
-      <Search search={search} setSearch={setSearch} />
+      <Search />
       <CustomSelect
         options={options}
         placeholder="Filter by Region"
         isClearable
         isSearchable={false}
-        value={region}
-        onChange={(selectedOption) =>
-          setRegion(selectedOption || { value: "" })
-        }
+        value={optionsMap[region]}
+        onChange={handleSelect}
       />
     </Wrapper>
   );
 };
-export default Controls;
