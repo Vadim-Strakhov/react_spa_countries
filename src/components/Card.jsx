@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Wrapper = styled.article`
-  border-radius: var(--radii);
+  border-radius: var(--radius);
   background-color: car(--colors-ui-base);
   box-shadow: var(--shadow);
   cursor: pointer;
