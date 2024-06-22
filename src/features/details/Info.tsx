@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { loadNeighborsByBorder, selectNeighbors } from "./details-slice";
 import { useNeighbors } from "./use-neighbors";
+import { Country } from "@src/types";
+import { NavigateFunction } from "react-router-dom";
 
 const Wrapper = styled.section`
   margin-top: 3rem;
@@ -91,7 +90,11 @@ const Tag = styled.span`
   cursor: pointer;
 `;
 
-export const Info = (props) => {
+interface InfoProp extends Country {
+  push: NavigateFunction;
+}
+
+export const Info = (props: InfoProp) => {
   const {
     name,
     nativeName,

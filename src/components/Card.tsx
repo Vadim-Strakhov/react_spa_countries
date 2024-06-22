@@ -1,3 +1,4 @@
+import { CountryInfo } from "@src/types";
 import styled from "styled-components";
 
 const Wrapper = styled.article`
@@ -43,7 +44,11 @@ const CardListItem = styled.li`
   }
 `;
 
-export const Card = ({ img, name, info = [], onClick }) => {
+interface CardProps extends CountryInfo {
+  onClick: () => void;
+}
+
+export const Card = ({ img, name, info = [], onClick }: CardProps) => {
   return (
     <Wrapper onClick={onClick}>
       <CardImage src={img} alt={name} />

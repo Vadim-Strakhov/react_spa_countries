@@ -17,20 +17,11 @@ const Wrapper = styled.div`
   padding: 2rem 0;
 `;
 
-const Title = styled(Link).attrs({
-  to: "/",
-})`
+const Title = styled(Link)`
   color: var(--colors-text);
   font-size: var(--fs-sm);
   text-decoration: none;
   font-weight: var(--fw-bold);
-`;
-
-const ModeSwitcher = styled.div`
-  color: var(--colors-text);
-  font-size: var(--fs-sm);
-  cursor: pointer;
-  text-transform: capitalize;
 `;
 
 export const Header = () => {
@@ -39,7 +30,9 @@ export const Header = () => {
     <HeaderEl>
       <Container>
         <Wrapper>
-          <Title onClick={cleanUP}>Where is the world?</Title>
+          <Title to="/" onClick={cleanUP}>
+            Where is the world?
+          </Title>
           <ThemeSwitcher />
         </Wrapper>
       </Container>

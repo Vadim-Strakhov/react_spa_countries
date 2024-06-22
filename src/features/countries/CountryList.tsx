@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { List } from "../../components/List";
-import { Card } from "../../components/Card";
 import { useCountries } from "./use-countries";
+import { List } from "@src/components/List";
+import { Card } from "@src/components/Card";
 
 const CountryList = () => {
   const navigate = useNavigate();
   // console.log(navigate);
 
-  const [countries, { status, error, qty }] = useCountries();
+  const [countries, { status, error }] = useCountries();
 
   return (
     <>
@@ -38,7 +38,7 @@ const CountryList = () => {
             return (
               <Card
                 key={c.name}
-                onClick={() => navigate(`/country/${c.name}`)}
+                onClick={() => void navigate(`/country/${c.name}`)}
                 {...countryInfo}
               />
             );
