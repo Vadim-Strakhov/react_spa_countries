@@ -9,4 +9,5 @@ export default defineConfig({
       "@src": "/src",
     },
   },
+  base: "react_ts_rtk_countries",
 });
