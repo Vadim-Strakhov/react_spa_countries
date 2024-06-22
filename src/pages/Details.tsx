@@ -7,8 +7,6 @@ export const Details = () => {
   const { name } = useParams();
   const navigate = useNavigate();
 
-  // console.log(name);
-
   return (
     <div>
       <Button onClick={() => navigate(-1)}>

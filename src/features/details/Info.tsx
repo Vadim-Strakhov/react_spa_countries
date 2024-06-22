@@ -166,7 +166,9 @@ export const Info = (props: InfoProp) => {
               {neighbors.map((countryName) => (
                 <Tag
                   key={countryName}
-                  onClick={() => push(`/country/${countryName}`)}
+                  onClick={() =>
+                    push(`/react_ts_rtk_countries/country/${countryName}`)
+                  }
                 >
                   {countryName}
                 </Tag>

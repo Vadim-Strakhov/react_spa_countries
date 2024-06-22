@@ -30,7 +30,7 @@ export const Header = () => {
     <HeaderEl>
       <Container>
         <Wrapper>
-          <Title to="/" onClick={cleanUP}>
+          <Title to="react_ts_rtk_countries/" onClick={cleanUP}>
             Where is the world?
           </Title>
           <ThemeSwitcher />

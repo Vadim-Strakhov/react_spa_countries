@@ -13,8 +13,11 @@ function App() {
       <Header />
       <Main>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/country/:name" element={<Details />} />
+          <Route path="react_ts_rtk_countries" element={<HomePage />} />
+          <Route
+            path="react_ts_rtk_countries/country/:name"
+            element={<Details />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Main>

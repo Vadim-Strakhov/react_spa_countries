@@ -38,7 +38,9 @@ const CountryList = () => {
             return (
               <Card
                 key={c.name}
-                onClick={() => void navigate(`/country/${c.name}`)}
+                onClick={() =>
+                  void navigate(`/react_ts_rtk_countries/country/${c.name}`)
+                }
                 {...countryInfo}
               />
             );
